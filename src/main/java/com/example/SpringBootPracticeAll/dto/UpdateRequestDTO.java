@@ -2,18 +2,19 @@ package com.example.SpringBootPracticeAll.dto;
 
 public class UpdateRequestDTO {
 
-    private  Long id;
+
     private  String name;
     private Integer age;
      private String course;
-
-    public Long getId() {
-        return id;
+    private  Integer rollNo;
+    public Integer getRollNo() {
+        return rollNo;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setRollNo(Integer rollNo) {
+        this.rollNo = rollNo;
     }
+
 
     public String getName() {
         return name;

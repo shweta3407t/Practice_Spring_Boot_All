@@ -9,6 +9,7 @@ public class Student {
 
 
     private  Long id;
+
     private  String name;
     private Integer age;
     private  String email;
@@ -18,6 +19,16 @@ public class Student {
 
     private LocalDateTime createdAt;
     private  LocalDateTime deletedAt;
+
+
+    private  Integer rollNo;
+    public Integer getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(Integer rollNo) {
+        this.rollNo = rollNo;
+    }
 
     public String getName() {
         return name;

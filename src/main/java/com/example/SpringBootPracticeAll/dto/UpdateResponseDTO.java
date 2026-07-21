@@ -14,6 +14,15 @@ public class UpdateResponseDTO {
 
     private  LocalDateTime updatedAt;
 
+    private  Integer rollNo;
+    public Integer getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(Integer rollNo) {
+        this.rollNo = rollNo;
+    }
+
     public Long getId() {
         return id;
     }

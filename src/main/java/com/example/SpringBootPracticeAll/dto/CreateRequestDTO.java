@@ -5,6 +5,16 @@ public class CreateRequestDTO {
     private Integer age;
     private  String email;
     private String course;
+    private  Integer rollNo;
+    public Integer getRollNo() {
+        return rollNo;
+    }
+
+    public void setRollNo(Integer rollNo) {
+        this.rollNo = rollNo;
+    }
+
+
 
     public String getName() {
         return name;

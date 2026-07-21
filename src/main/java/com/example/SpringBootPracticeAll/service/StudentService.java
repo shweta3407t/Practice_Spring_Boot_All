@@ -2,8 +2,11 @@ package com.example.SpringBootPracticeAll.service;
 
 import com.example.SpringBootPracticeAll.dto.CreateRequestDTO;
 import com.example.SpringBootPracticeAll.dto.CreateResponseDTO;
+import com.example.SpringBootPracticeAll.dto.UpdateRequestDTO;
+import com.example.SpringBootPracticeAll.dto.UpdateResponseDTO;
 import com.example.SpringBootPracticeAll.entity.Student;
 import com.example.SpringBootPracticeAll.repository.StudentRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -34,7 +37,7 @@ public class StudentService {
     }
 
     public CreateResponseDTO getOneStudent(Long id){
-        Optional<CreateResponseDTO> student=studentRepository.findById(id);
+        Student student=studentRepository. findById(id) ;
 
         return   mapToDTO(student);
     }
@@ -45,6 +48,55 @@ public class StudentService {
         return  studentList;
     }
 
+    public UpdateResponseDTO updateOneStudent(Long id , UpdateRequestDTO student){
+           UpdateResponseDTO oldStudent=studentRepository.findByIdAndDeletedFalse(id);
+
+
+           oldStudent.setName(student.getName());
+           oldStudent.setAge(student.getAge());
+           oldStudent.setCourse(student.getCourse());
+           oldStudent.setRollNo(student.getRollNo());
+
+           oldStudent.setDeleted(false);
+           oldStudent.setUpdatedAt(LocalDateTime.now());
+
+
+           Student studentRes= studentRepository.save( oldStudent);
+
+           return mapToUpdatedDTO(studentRes);
+
+    }
+
+    public   void deleteOneStudent(Long id){
+        studentRepository.delete(id);
+
+    }
+
+    public  void  deleteAllStudent(){
+        studentRepository.deleteAll();
+    }
+
+
+    public void softDeleteOneStudent(Long id){
+        Student student=studentRepository.findByIdAndDeletedFalse(id);
+
+        student.setDeleted(true);
+
+        studentRepository.save(student);
+    }
+
+    public Boolean softDeleteAllStudent( ) {
+
+        List<Student> list = studentRepository.findByDeletedFalse();
+
+        for (Student s : list) {
+            s.setDeleted(true);
+        }
+        return true;
+
+    }
+
+
     public  Student mapToEntity(CreateRequestDTO  studentReq){
         Student student=new Student();
 
@@ -52,6 +104,8 @@ public class StudentService {
         student.setAge(studentReq.getAge());
         student.setCourse(studentReq.getCourse());
         student.setEmail(studentReq.getEmail());
+        student.setRollNo(studentReq.getRollNo());
+
 
 
         return student;
@@ -61,6 +115,7 @@ public class StudentService {
 
         CreateResponseDTO responseDTO=new CreateResponseDTO();
 
+        responseDTO.setRollNo(student.getRollNo());
         responseDTO.setId(student.getId());
         responseDTO.setName(student.getName());
         responseDTO.setAge(student.getAge());
@@ -74,6 +129,21 @@ public class StudentService {
         return  responseDTO;
     }
 
+    public UpdateResponseDTO mapToUpdatedDTO(Student student){
+        UpdateResponseDTO responseDTO=new UpdateResponseDTO();
+
+        responseDTO.setRollNo(student.getRollNo());
+        responseDTO.setId(student.getId());
+        responseDTO.setName(student.getName());
+        responseDTO.setAge(student.getAge());
+        responseDTO.setCourse(student.getCourse());
+        responseDTO.setEmail(student.getEmail());
+        responseDTO.setDeleted(false);
+
+         responseDTO.setUpdatedAt(LocalDateTime .now());
+
+        return  responseDTO;
+    }
 
 
 }
