@@ -1,6 +1,7 @@
 package com.example.SpringBootPracticeAll.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,8 @@ public class Student {
 
     private  String name;
     private Integer age;
+
+    @Email
     private  String email;
     private String course;
 

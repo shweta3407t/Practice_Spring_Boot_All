@@ -45,7 +45,7 @@ public class StudentController {
     }
 
 
-    @PatchMapping("/{id}")
+    @PutMapping("/{id}")
     public  ResponseEntity<UpdateResponseDTO> updateOneStudent(@PathVariable Long id,@RequestBody  UpdateRequestDTO studentReq){
         UpdateResponseDTO newStudent=studentService.updateOneStudent(id ,studentReq );
 
@@ -67,14 +67,14 @@ public class StudentController {
         return ResponseEntity.ok("All Student deleted permanently");
     }
 
-    @DeleteMapping("/{id}")
+    @PatchMapping("/{id}")
     public  ResponseEntity<String> softDeleteOneStudent(@PathVariable Long id){
          studentService.softDeleteOneStudent(id);
 
         return ResponseEntity.ok("Student soft deleted");
     }
 
-    @DeleteMapping
+    @PatchMapping
     public  ResponseEntity<String> softDeleteAllStudent(){
         studentService.softDeleteAllStudent( );
 

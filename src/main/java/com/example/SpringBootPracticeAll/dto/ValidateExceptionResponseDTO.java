@@ -1,26 +1,25 @@
 package com.example.SpringBootPracticeAll.dto;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.Map;
 
-public class ValidateExceptionResponse {
+public class ValidateExceptionResponseDTO {
 
     private LocalDateTime timeStamp;
-    private Integer statusCode;
-    private String error;
-    private String message;
-    private  String path;
+    private  Integer statusCode;
+    private  String error;
+    private  String message;
+    private String path;
 
-    private  Map<String ,String>  fieldError;
+    private Map<String ,String> fieldErrors;
 
-    public ValidateExceptionResponse(LocalDateTime timeStamp, Integer statusCode, String error, String message, String path, Map<String, String> fieldError) {
+    public ValidateExceptionResponseDTO(LocalDateTime timeStamp, Integer statusCode, String error, String message, String path, Map<String, String> fieldError) {
         this.timeStamp = timeStamp;
         this.statusCode = statusCode;
         this.error = error;
         this.message = message;
         this.path = path;
-        this.fieldError = fieldError;
+        this.fieldErrors = fieldError;
     }
 
     public LocalDateTime getTimeStamp() {
@@ -64,10 +63,10 @@ public class ValidateExceptionResponse {
     }
 
     public Map<String, String> getFieldError() {
-        return fieldError;
+        return fieldErrors;
     }
 
     public void setFieldError(Map<String, String> fieldError) {
-        this.fieldError = fieldError;
+        this.fieldErrors= fieldError;
     }
 }

@@ -5,6 +5,7 @@ import com.example.SpringBootPracticeAll.dto.CreateResponseDTO;
 import com.example.SpringBootPracticeAll.dto.UpdateRequestDTO;
 import com.example.SpringBootPracticeAll.dto.UpdateResponseDTO;
 import com.example.SpringBootPracticeAll.entity.Student;
+import com.example.SpringBootPracticeAll.exceeption.DuplicateResourceException;
 import com.example.SpringBootPracticeAll.repository.StudentRepository;
  import org.springframework.stereotype.Service;
 
@@ -24,10 +25,16 @@ public class StudentService {
 
     public CreateResponseDTO createStudent(CreateRequestDTO studentReq){
 
-         Student student=mapToEntity(studentReq);
+        Student student=mapToEntity(studentReq);
 
 
-         CreateResponseDTO studentResponse=mapToDTO(student);
+        if( checkEmailExist( student)){
+                throw   new DuplicateResourceException("Student with email " + student.getEmail() + "already exist");
+        }
+
+        studentRepository.save(student);
+
+        CreateResponseDTO studentResponse=mapToDTO(student);
 
          return studentResponse;
 
@@ -37,7 +44,7 @@ public class StudentService {
     public CreateResponseDTO getOneStudent(Long id){
         Student student=studentRepository
                 .findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new RuntimeException("Runtime Exception"));
+                .orElseThrow(() -> new RuntimeException("Student with id " + id+  " not found."));
 
         return   mapToDTO(student);
     }
@@ -51,7 +58,7 @@ public class StudentService {
     public UpdateResponseDTO updateOneStudent(Long id , UpdateRequestDTO student){
            Student oldStudent=studentRepository
                    .findByIdAndDeletedFalse(id)
-                   .orElseThrow(() -> new RuntimeException("Run time exception") );
+                   .orElseThrow(() -> new RuntimeException("Student with id " + id+  " not found.") );
 
            oldStudent.setName(student.getName());
            oldStudent.setAge(student.getAge());
@@ -70,7 +77,9 @@ public class StudentService {
 
     public   void deleteOneStudent(Long id){
 
-        studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Runtime Exception"));
+        Student student=studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student with id " + id+  " not found."));
+
+        studentRepository.delete(student);
 
     }
 
@@ -78,11 +87,15 @@ public class StudentService {
         studentRepository.deleteAll();
     }
 
+    public Boolean checkEmailExist (Student student){
+        return  studentRepository. emailExists(student);
+    }
+
 
     public void softDeleteOneStudent(Long id){
         Student student=studentRepository
                 .findByIdAndDeletedFalse(id)
-                .orElseThrow(() -> new RuntimeException("Runtime Exception"));
+                .orElseThrow(() -> new RuntimeException("Student with id " + id+  " not found."));
 
         student.setDeleted(true);
 
