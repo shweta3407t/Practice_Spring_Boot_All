@@ -12,7 +12,7 @@ public class ExceptionResponseDTO {
 
 
 
-    ExceptionResponseDTO(LocalDateTime t, Integer s, String e, String m, String p){
+    public ExceptionResponseDTO(LocalDateTime t, Integer s, String e, String m, String p){
         this.timeStamp=t;
         this.statusCode=s;
         this.error=e;

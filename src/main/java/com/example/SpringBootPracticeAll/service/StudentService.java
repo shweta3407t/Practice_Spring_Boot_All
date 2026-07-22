@@ -90,15 +90,13 @@ public class StudentService {
 
     }
 
-    public Boolean softDeleteAllStudent( ) {
+    public void softDeleteAllStudent( ) {
 
         List<Student> list = studentRepository.findByDeletedFalse();
 
         for (Student s : list) {
             s.setDeleted(true);
         }
-        return true;
-
     }
 
 
