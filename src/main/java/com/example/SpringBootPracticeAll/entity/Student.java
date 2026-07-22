@@ -1,6 +1,9 @@
 package com.example.SpringBootPracticeAll.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 
@@ -8,6 +11,8 @@ import java.time.LocalDateTime;
 public class Student {
 
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
 
     private  String name;
@@ -18,7 +23,7 @@ public class Student {
     private Boolean Deleted;
 
     private LocalDateTime createdAt;
-    private  LocalDateTime deletedAt;
+    private  LocalDateTime updatedAt;
 
 
     private  Integer rollNo;
@@ -86,11 +91,13 @@ public class Student {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
+    public void setUpdatedAt(LocalDateTime deletedAt) {
+        this.updatedAt = deletedAt;
     }
+
+
 }

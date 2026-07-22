@@ -6,9 +6,7 @@ import com.example.SpringBootPracticeAll.dto.UpdateRequestDTO;
 import com.example.SpringBootPracticeAll.dto.UpdateResponseDTO;
 import com.example.SpringBootPracticeAll.entity.Student;
 import com.example.SpringBootPracticeAll.repository.StudentRepository;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,20 +35,23 @@ public class StudentService {
     }
 
     public CreateResponseDTO getOneStudent(Long id){
-        Student student=studentRepository. findById(id) ;
+        Student student=studentRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Runtime Exception"));
 
         return   mapToDTO(student);
     }
 
     public List<Student >  getAllStudent(){
-        List<Student> studentList=studentRepository.findAll();
+        List<Student> studentList=studentRepository.findByDeletedFalse();
 
         return  studentList;
     }
 
     public UpdateResponseDTO updateOneStudent(Long id , UpdateRequestDTO student){
-           UpdateResponseDTO oldStudent=studentRepository.findByIdAndDeletedFalse(id);
-
+           Student oldStudent=studentRepository
+                   .findByIdAndDeletedFalse(id)
+                   .orElseThrow(() -> new RuntimeException("Run time exception") );
 
            oldStudent.setName(student.getName());
            oldStudent.setAge(student.getAge());
@@ -61,14 +62,15 @@ public class StudentService {
            oldStudent.setUpdatedAt(LocalDateTime.now());
 
 
-           Student studentRes= studentRepository.save( oldStudent);
+        Student savedStudent= studentRepository.save(oldStudent);
 
-           return mapToUpdatedDTO(studentRes);
+        return mapToUpdatedDTO(savedStudent);
 
     }
 
     public   void deleteOneStudent(Long id){
-        studentRepository.delete(id);
+
+        studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Runtime Exception"));
 
     }
 
@@ -78,11 +80,14 @@ public class StudentService {
 
 
     public void softDeleteOneStudent(Long id){
-        Student student=studentRepository.findByIdAndDeletedFalse(id);
+        Student student=studentRepository
+                .findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new RuntimeException("Runtime Exception"));
 
         student.setDeleted(true);
 
         studentRepository.save(student);
+
     }
 
     public Boolean softDeleteAllStudent( ) {
@@ -95,6 +100,18 @@ public class StudentService {
         return true;
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     public  Student mapToEntity(CreateRequestDTO  studentReq){
