@@ -1,28 +1,28 @@
 package com.example.SpringBootPracticeAll.dto;
 
 import jakarta.persistence.Entity;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 
 public class CreateRequestDTO {
     @NotBlank(message = "name should not be null/empty or blank")
-     private  String name;
+    @Size(min =2 , max=50 , message = "Student name must be within 2 - 50 character")
+    private String name;
 
-    @NotBlank(message = "name should not be null/empty or blank")
+    @NotNull(message = "name should not be null/empty or blank")
     @Min(10) @Max(value = 50 ,message = "Age should be between 10 -50 years old")
     private Integer age;
+
+
+    @NotBlank(message = "name should not be null/empty or blank")
+    private String course;
+
+    @NotNull(message = "name should not be null/empty or blank")
+    private  Integer rollNo;
 
     @NotBlank(message = "name should not be null/empty or blank")
     @Email
     private  String email;
 
-    @NotBlank(message = "name should not be null/empty or blank")
-    private String course;
-
-    @NotBlank(message = "name should not be null/empty or blank")
-    private  Integer rollNo;
 
 
     public Integer getRollNo() {

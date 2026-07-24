@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Email;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name ="allStudent")
+@Table(name ="PracticeAll")
 public class Student {
 
 

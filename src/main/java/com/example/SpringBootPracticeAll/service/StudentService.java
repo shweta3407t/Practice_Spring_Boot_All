@@ -25,20 +25,18 @@ public class StudentService {
 
     public CreateResponseDTO createStudent(CreateRequestDTO studentReq){
 
+        String email=studentReq.getEmail();
+        if( checkEmailExist( email)){
+                throw   new DuplicateResourceException("Student with email " + email + "already exist");
+        }
         Student student=mapToEntity(studentReq);
 
-
-        if( checkEmailExist( student)){
-                throw   new DuplicateResourceException("Student with email " + student.getEmail() + "already exist");
-        }
 
         studentRepository.save(student);
 
         CreateResponseDTO studentResponse=mapToDTO(student);
 
          return studentResponse;
-
-
     }
 
     public CreateResponseDTO getOneStudent(Long id){
@@ -56,6 +54,7 @@ public class StudentService {
     }
 
     public UpdateResponseDTO updateOneStudent(Long id , UpdateRequestDTO student){
+
            Student oldStudent=studentRepository
                    .findByIdAndDeletedFalse(id)
                    .orElseThrow(() -> new RuntimeException("Student with id " + id+  " not found.") );
@@ -67,7 +66,6 @@ public class StudentService {
 
            oldStudent.setDeleted(false);
            oldStudent.setUpdatedAt(LocalDateTime.now());
-
 
         Student savedStudent= studentRepository.save(oldStudent);
 
@@ -87,11 +85,6 @@ public class StudentService {
         studentRepository.deleteAll();
     }
 
-    public Boolean checkEmailExist (Student student){
-        return  studentRepository. emailExists(student);
-    }
-
-
     public void softDeleteOneStudent(Long id){
         Student student=studentRepository
                 .findByIdAndDeletedFalse(id)
@@ -109,7 +102,12 @@ public class StudentService {
 
         for (Student s : list) {
             s.setDeleted(true);
+            studentRepository.save(s);
         }
+    }
+
+    public Boolean checkEmailExist (String email){
+        return  studentRepository. emailExists(email);
     }
 
 
@@ -134,8 +132,12 @@ public class StudentService {
         student.setEmail(studentReq.getEmail());
         student.setRollNo(studentReq.getRollNo());
 
+        student.setDeleted(true);
 
+        student.setCreatedAt(LocalDateTime.now());
+        student.setUpdatedAt(LocalDateTime.now());
 
+        studentRepository.save(student);
         return student;
     }
 
@@ -157,6 +159,28 @@ public class StudentService {
         return  responseDTO;
     }
 
+
+
+
+//no use
+
+//    public  Student mapToUpdateEntity(UpdateRequestDTO  studentReq){
+//        Student student=new Student();
+//
+//        student.setName(studentReq.getName());
+//        student.setAge(studentReq.getAge());
+//        student.setCourse(studentReq.getCourse());
+//        student.setRollNo(studentReq.getRollNo());
+//
+//        student.setDeleted(true);
+//
+//        student.setCreatedAt(LocalDateTime.now());
+//        student.setUpdatedAt(LocalDateTime.now());
+//
+//        studentRepository.save(student);
+//        return student;
+//    }
+
     public UpdateResponseDTO mapToUpdatedDTO(Student student){
         UpdateResponseDTO responseDTO=new UpdateResponseDTO();
 
@@ -165,6 +189,7 @@ public class StudentService {
         responseDTO.setName(student.getName());
         responseDTO.setAge(student.getAge());
         responseDTO.setCourse(student.getCourse());
+
         responseDTO.setEmail(student.getEmail());
         responseDTO.setDeleted(false);
 

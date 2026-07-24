@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request , MethodArgumentNotValidException e){
 
         Map<String ,String>  fieldErrors=new HashMap<>();
+
         e.getBindingResult().getFieldErrors()
                 .forEach(error ->
                         fieldErrors.put(error.getField() , error.getDefaultMessage()));
@@ -60,7 +61,7 @@ public class GlobalExceptionHandler {
                   LocalDateTime.now(),
                  HttpStatus.INTERNAL_SERVER_ERROR.value(),
                  HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-              "Validation failed",
+                  e.getMessage(),
                  request.getRequestURI());
 
         return ResponseEntity
@@ -78,7 +79,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "Validation failed",
+                e.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity
@@ -100,7 +101,7 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now(),
                 HttpStatus. CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
-                "Validation failed",
+                e.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity
@@ -110,17 +111,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ExceptionResponseDTO> ResourceNotFoundExceptionHandler(HttpServletRequest request , RuntimeException e){
+    public ResponseEntity<ExceptionResponseDTO> ResourceNotFoundExceptionHandler(
+            HttpServletRequest request , ResourceNotFoundException e){
 
         ExceptionResponseDTO exceptionResponse=new ExceptionResponseDTO(
                 LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(),
-                HttpStatus.CONFLICT.getReasonPhrase(),
-                "Validation failed",
+                HttpStatus.NOT_FOUND.value(),
+                HttpStatus.NOT_FOUND.getReasonPhrase(),
+                e.getMessage(),
                 request.getRequestURI());
 
         return ResponseEntity
-                .status(HttpStatus.CONFLICT)
+                .status(HttpStatus.NOT_FOUND)
                 .body(exceptionResponse);
 
     }
